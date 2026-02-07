@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+<<<<<<< HEAD
 
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   subsets: ['latin']
 })
 
+=======
+import { Provider } from "@/components/providers";
+
+const jetBrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+});
+>>>>>>> development
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,10 +29,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+<<<<<<< HEAD
       <body
         className={`${jetBrainsMono.variable} antialiased`}
       >
         {children}
+=======
+      <body className={`${jetBrainsMono.variable} antialiased`}>
+        <Provider>{children}</Provider>
+>>>>>>> development
       </body>
     </html>
   );
