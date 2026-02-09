@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import useUsername from "@/hooks/use-username";
 import { client } from "@/lib/client";
 import { useMutation } from "@tanstack/react-query";
@@ -25,64 +26,74 @@ export default function Homepage() {
   });
 
   return (
-    <main className="flex items-center min-h-screen justify-center flex-col p-4">
+    /* Menggunakan font-mono (JetBrains Mono) secara global di halaman ini */
+    <main className="flex items-center min-h-screen justify-center flex-col p-4 bg-background text-foreground font-mono">
       <div className="w-full max-w-md space-y-8">
-        {wasDestroyed && (
-          <div className="bg-red-950/50 border border-red-900 p-4 text-center">
-            <p className="text-red-500 text-sm font-bold">Room Destroyed</p>
-            <p className="text-zinc-500 text-xs mt-1">
-              All messagaes were permanenlty deleted.
+        
+        {/* Error/Status Alerts */}
+        {(wasDestroyed || error) && (
+          <div className="bg-destructive/10 border border-destructive/20 p-4 text-center rounded-lg">
+            <p className="text-destructive text-sm font-bold tracking-tighter">
+              {wasDestroyed ? "SYSTEM: Room Destroyed" : 
+               error === "room-not-found" ? "ERROR: Room not found" : 
+               "ERROR: Room full"}
             </p>
-          </div>
-        )}
-
-        {error === "room-not-found" && (
-          <div className="bg-red-950/50 border border-red-900 p-4 text-center">
-            <p className="text-red-500 text-sm font-bold">Room not found</p>
-            <p className="text-zinc-500 text-xs mt-1">
-              This room may have expired or never existed.
-            </p>
-          </div>
-        )}
-
-        {error === "room-full" && (
-          <div className="bg-red-950/50 border border-red-900 p-4 text-center">
-            <p className="text-red-500 text-sm font-bold">Room full</p>
-            <p className="text-zinc-500 text-xs mt-1">
-              This room is at maximum capacity.
+            <p className="text-muted-foreground text-xs mt-1">
+              {wasDestroyed ? "All data has been wiped from the server." :
+               error === "room-not-found" ? "The requested ID does not exist." :
+               "Maximum capacity reached."}
             </p>
           </div>
         )}
 
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight text-green-500">
+          {/* Logo dengan warna Primary */}
+          <h1 className="text-2xl font-bold tracking-tighter text-primary">
             {">"}private_chat
           </h1>
-          <p>A private, self destruction chat room.</p>
+          <p className="text-muted-foreground text-sm tracking-tight">
+            Encrypted, self-destructing communication.
+          </p>
         </div>
 
-        <div className="border border-zinc-800 bg-zinc-900/50 p-6 backdrop-blur-md">
-          <div className="space-y-5">
-            <div className="space-y-2">
-              Create Room
-              <label className="flex items-center text-zinc-500">
-                Your Identity
+        {/* Main Interface Card */}
+        <div className="border border-border bg-card p-6 rounded-xl shadow-lg">
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <label className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+                Operator Identity
               </label>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 bg-zinc-950 border border-zinc-800 p-3 text-sm text-zinc-400 font-mono">
+              <div className="relative">
+                {/* Visual Identity Display */}
+                <div className="w-full bg-muted/30 border border-input p-4 text-sm text-primary rounded-md border-dashed">
+                  <span className="opacity-50 mr-2">$</span>
                   {username}
                 </div>
               </div>
             </div>
 
-            <button
-              onClick={() => createRoom()}
-              className="w-full bg-zinc-100 text-black p-3 text-sm font-bold hover:bg-zinc-50 hover:text-black transition-colors mt-2 cursor-pointer disabled:opacity-50"
-            >
-              Create Secure Room
-            </button>
+            <div className="space-y-3">
+              <button
+                onClick={() => createRoom()}
+                className="w-full bg-primary text-primary-foreground p-3 text-sm font-bold hover:opacity-90 transition-all rounded-md shadow-sm cursor-pointer disabled:opacity-50 active:scale-[0.98]"
+              >
+                INITIALIZE_SECURE_ROOM
+              </button>
+              
+              <Button 
+                variant="outline" 
+                className="w-full border-border text-muted-foreground text-xs hover:bg-accent"
+              >
+                JOIN_VIA_ID
+              </Button>
+            </div>
           </div>
         </div>
+
+        {/* Footer Info */}
+        <p className="text-[10px] text-center text-muted-foreground/50 uppercase tracking-[0.2em]">
+          End-to-End Encryption Active
+        </p>
       </div>
     </main>
   );
